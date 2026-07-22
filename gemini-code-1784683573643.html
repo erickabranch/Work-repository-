@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prorated Refund Calculator</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 16px;
+      color: #16325c;
+    }
+    .calculator-card {
+      background: #ffffff;
+      border: 1px solid #dddbda;
+      border-radius: 8px;
+      padding: 20px;
+      max-width: 380px;
+      margin: 0 auto;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 1.15rem;
+      color: #0070d2;
+      margin-bottom: 16px;
+      border-bottom: 2px solid #f3f2f2;
+      padding-bottom: 8px;
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+      color: #3e3e3c;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #dddbda;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+      transition: border-color 0.2s ease-in-out;
+    }
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #1589ee;
+      box-shadow: 0 0 3px #1589ee;
+    }
+    .results {
+      margin-top: 18px;
+      background-color: #f3f2f2;
+      border-radius: 6px;
+      padding: 14px;
+    }
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+    .result-row:last-child {
+      margin-bottom: 0;
+    }
+    .result-row.total {
+      font-weight: bold;
+      font-size: 1.05rem;
+      color: #0b5cab;
+      border-top: 1px solid #d8d6d5;
+      padding-top: 8px;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="calculator-card">
+  <h2>Prorated Refund Calculator</h2>
+  
+  <div class="form-group">
+    <label for="planPrice">Plan Price ($)</label>
+    <input type="number" id="planPrice" placeholder="Enter total plan price" step="0.01" min="0" oninput="calculateRefund()">
+  </div>
+  
+  <div class="form-group">
+    <label for="unusedMonths">Number of Unused Months</label>
+    <input type="number" id="unusedMonths" placeholder="Enter unused months (1-12)" step="1" min="0" max="12" oninput="calculateRefund()">
+  </div>
+
+  <div class="results">
+    <div class="result-row">
+      <span>Monthly Rate (xxx):</span>
+      <span id="monthlyRate">$0.00</span>
+    </div>
+    <div class="result-row total">
+      <span>Prorated Refund:</span>
+      <span id="proratedRefund">$0.00</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  function calculateRefund() {
+    const planPrice = parseFloat(document.getElementById('planPrice').value) || 0;
+    const unusedMonths = parseFloat(document.getElementById('unusedMonths').value) || 0;
+
+    // Plan price / 12 months = xxx
+    const monthlyRate = planPrice / 12;
+
+    // xxx * number of unused months = Prorated refund
+    const refund = monthlyRate * unusedMonths;
+
+    // Currency Formatter
+    const formatter = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2
+    });
+
+    document.getElementById('monthlyRate').textContent = formatter.format(monthlyRate);
+    document.getElementById('proratedRefund').textContent = formatter.format(refund);
+  }
+</script>
+
+</body>
+</html>
